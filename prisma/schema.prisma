@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+generator zod {
+  provider              = "zod-prisma"
+  output                = "./zod"
+  relationModel         = true
+  modelCase             = "camelCase"
+  modelSuffix           = "Schema"
+  useDecimalJs          = true
+  prismaJsonNullability = true
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  name     String
+  despesas Expense[]
+}
+
+model Expense {
+  id           Int       @id @default(autoincrement())
+  description   String
+  value        Float
+  date         DateTime  @default(now())
+  note         String?
+  category     String
+  paid         Boolean   @default(false)
+  paymentMethod  String?
+  userId      String
+  attachments Attachment[]
+  public      Boolean   @default(false)
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  data       String
+  expenseId Int
+  expense   Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+}
