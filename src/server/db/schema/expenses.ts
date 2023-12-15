@@ -6,6 +6,11 @@ export const insertExpenseSchema = expenseSchema.omit({
   userId: true,
 });
 
+export const insertAttachmentSchema = attachmentSchema.omit({
+  id: true,
+  expenseId: true,
+});
+
 export const insertExpenseParams = insertExpenseSchema.extend({
   value: z
     .number({
@@ -33,7 +38,7 @@ export const insertExpenseParams = insertExpenseSchema.extend({
     .max(20, { message: "Category too long." })
     .optional(),
   attachments: z
-    .array(attachmentSchema)
+    .array(insertAttachmentSchema)
     .max(5, {
       message: "Too many attachments.",
     })

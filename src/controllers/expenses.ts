@@ -30,6 +30,9 @@ export const getExpense: RequestHandler = async (req, res, next) => {
         id: id,
         userId: req.body.user.id,
       },
+      include: {
+        attachments: true,
+      },
     });
     return res.status(200).json({
       expense,
@@ -41,8 +44,6 @@ export const getExpense: RequestHandler = async (req, res, next) => {
 
 export const getExpenses: RequestHandler = async (req, res, next) => {
   const { search, minDate, maxDate, limit, offset, publico } = req.query;
-
-  console.log(req.query);
   const where: WhereClause = {
     userId: publico?.toString() === "true" ? undefined : req.body.user.id,
     description: {
@@ -67,6 +68,9 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
       where: where,
       take: parseInt(limit as string, 10) || 10, // defaults to 10
       skip: parseInt(offset as string, 10) || 0, // default offset to 0
+      include: {
+        attachments: true,
+      },
     });
     if (expenses.length === 0) {
       return res.status(404).json({
