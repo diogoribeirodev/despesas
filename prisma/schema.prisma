@@ -28,11 +28,11 @@ model User {
 
 model Expense {
   id           Int       @id @default(autoincrement())
-  description   String
+  description   String?
   value        Float
   date         DateTime  @default(now())
   note         String?
-  category     String
+  category     String?
   paid         Boolean   @default(false)
   paymentMethod  String?
   userId      String

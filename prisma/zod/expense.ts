@@ -3,11 +3,11 @@ import { CompleteAttachment, relatedAttachmentSchema, CompleteUser, relatedUserS
 
 export const expenseSchema = z.object({
   id: z.number().int(),
-  description: z.string(),
+  description: z.string().nullish(),
   value: z.number(),
   date: z.date(),
   note: z.string().nullish(),
-  category: z.string(),
+  category: z.string().nullish(),
   paid: z.boolean(),
   paymentMethod: z.string().nullish(),
   userId: z.string(),

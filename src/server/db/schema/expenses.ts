@@ -7,14 +7,31 @@ export const insertExpenseSchema = expenseSchema.omit({
 });
 
 export const insertExpenseParams = insertExpenseSchema.extend({
-  value: z.number().positive({ message: "Paid amount has to be positive." }),
-  date: z.date().max(new Date(), { message: "Date cannot be in the future." }),
-  note: z.string().max(100, { message: "Note too long." }).optional(),
+  value: z
+    .number({
+      required_error: "Value is required",
+      invalid_type_error: "Value has to be a number.",
+    })
+    .positive({ message: "Paid amount has to be positive." }),
+  date: z
+    .string()
+    .datetime({ message: "Date has to be in ISO format." })
+    .max(30, { message: "Date too long." }),
+  note: z
+    .string()
+    .min(3, { message: "Note too short." })
+    .max(100, { message: "Note too long." })
+    .optional(),
   description: z
     .string()
+    .min(3, { message: "Description too short." })
     .max(100, { message: "Description too long." })
     .optional(),
-  category: z.string().max(20, { message: "Category too long." }).optional(),
+  category: z
+    .string()
+    .min(3, { message: "Category too short." })
+    .max(20, { message: "Category too long." })
+    .optional(),
   attachments: z
     .array(attachmentSchema)
     .max(5, {
@@ -29,9 +46,14 @@ export const insertExpenseParams = insertExpenseSchema.extend({
   public: z.boolean().default(false).optional(),
 });
 
-export const expenseIdSchema = expenseSchema.pick({ id: true });
+export const expenseIdSchema = z
+  .number({
+    required_error: "Expense ID is required",
+    invalid_type_error: "Expense ID has to be a number.",
+  })
+  .positive({ message: "Expense ID has to be a positive number." });
 
 export type Expense = z.infer<typeof expenseSchema>;
 export type NewExpense = z.infer<typeof insertExpenseSchema>;
 export type NewExpenseParams = z.infer<typeof insertExpenseParams>;
-export type ExpenseId = z.infer<typeof expenseIdSchema>["id"];
+export type ExpenseId = z.infer<typeof expenseIdSchema>;

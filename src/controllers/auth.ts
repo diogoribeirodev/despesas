@@ -4,17 +4,13 @@ import { db } from "../server/db";
 import { insertUserParams } from "../server/db/schema/users";
 import { GenerateAccessToken } from "../utils/authenticate";
 
-export const SignupUser: RequestHandler = async (req, res, next) => {
-  const result = insertUserParams.safeParse(req.body);
-  if (!result.success)
-    return res
-      .status(400)
-      .json({ error: 400, message: result.error.flatten().fieldErrors });
+export const signUpUser: RequestHandler = async (req, res, next) => {
   try {
+    const params = insertUserParams.parse(req.body);
     await db.user.create({
       data: {
-        ...result.data,
-        password: bycrypt.hashSync(result.data.password, 8),
+        ...params,
+        password: bycrypt.hashSync(params.password, 8),
       },
     });
     return res.status(201).json({ message: "User created successfully." });
@@ -23,19 +19,14 @@ export const SignupUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const SignInUser: RequestHandler = async (req, res, next) => {
-  const result = insertUserParams.omit({ name: true }).safeParse(req.body);
-  if (!result.success)
-    return res
-      .status(400)
-      .json({ error: 400, message: result.error.flatten().fieldErrors });
+export const signInUser: RequestHandler = async (req, res, next) => {
   try {
+    const params = insertUserParams.omit({ name: true }).parse(req.body);
     const user = await db.user.findUnique({
-      where: { email: result.data.email },
+      where: { email: params.email },
     });
-    if (!user || !bycrypt.compareSync(result.data.password, user.password)) {
+    if (!user || !bycrypt.compareSync(params.password, user.password)) {
       return res.status(404).json({
-        error: 404,
         message: "Invalid credentials.",
       });
     }

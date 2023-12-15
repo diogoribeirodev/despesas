@@ -1,11 +1,20 @@
 import { Router } from "express";
-import { GetExpense, GetExpenses } from "../controllers/expenses";
+import {
+  createExpense,
+  deleteExpense,
+  getExpense,
+  getExpenses,
+  updateExpense,
+} from "../controllers/expenses";
 import { authMiddleware } from "../middlewares/auth";
 
 const expenseRouter = Router();
 
 expenseRouter.use(authMiddleware);
-expenseRouter.get("/:id", GetExpense);
-expenseRouter.get("/", GetExpenses);
+expenseRouter.get("/:id", getExpense);
+expenseRouter.get("/", getExpenses);
+expenseRouter.post("/", createExpense);
+expenseRouter.put("/:id", updateExpense);
+expenseRouter.delete("/:id", deleteExpense);
 
 export default expenseRouter;

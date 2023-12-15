@@ -5,7 +5,7 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
   const accessToken = req.headers["authorization"]; // req.headers['x-access-token'];
 
   if (!accessToken) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).json({ message: "Unauthorized!" });
   }
 
   try {
@@ -13,10 +13,10 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
     const bearerToken = bearer[1];
 
     const result = CertifyAccessToken(bearerToken);
-    req.body = result;
+    req.body.user = result;
 
     return next();
   } catch (err) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).json({ message: "Unauthorized!" });
   }
 };

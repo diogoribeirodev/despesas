@@ -1,13 +1,34 @@
 import { RequestHandler } from "express";
 import { db } from "../server/db";
-import { insertExpenseParams } from "../server/db/schema/expenses";
+import {
+  expenseIdSchema,
+  insertExpenseParams,
+} from "../server/db/schema/expenses";
 
-export const GetExpense: RequestHandler = async (req, res, next) => {
-  const id = parseInt(req.params.id);
+type WhereClause = {
+  userId?: string;
+  description?: {
+    contains: string;
+    mode: "insensitive";
+  };
+  note?: {
+    contains: string;
+    mode: "insensitive";
+  };
+  date?: {
+    gte?: Date;
+    lte?: Date;
+  };
+  public?: boolean;
+};
+
+export const getExpense: RequestHandler = async (req, res, next) => {
   try {
+    const id = expenseIdSchema.parse(parseInt(req.params.id));
     const expense = await db.expense.findUniqueOrThrow({
       where: {
         id: id,
+        userId: req.body.user.id,
       },
     });
     return res.status(200).json({
@@ -18,17 +39,33 @@ export const GetExpense: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const GetExpenses: RequestHandler = async (req, res, next) => {
-  const userId = req.params.userId;
+export const getExpenses: RequestHandler = async (req, res, next) => {
+  const { search, minDate, maxDate, limit, offset } = req.query;
+
+  const where: WhereClause = {
+    userId: req.body.user.id,
+    description: {
+      contains: search as string,
+      mode: "insensitive",
+    },
+    note: {
+      contains: search as string,
+      mode: "insensitive",
+    },
+    date: {
+      gte: minDate ? new Date(minDate as string) : undefined,
+      lte: maxDate ? new Date(maxDate as string) : undefined,
+    },
+  };
+
   try {
     const expenses = await db.expense.findMany({
-      where: {
-        userId: userId,
-      },
+      where: where,
+      take: parseInt(limit as string, 10) || 10, // defaults to 10
+      skip: parseInt(offset as string, 10) || 0, // default offset to 0
     });
-    if (!expenses) {
+    if (expenses.length === 0) {
       return res.status(404).json({
-        error: 404,
         message: "No expenses found.",
       });
     }
@@ -40,25 +77,87 @@ export const GetExpenses: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const CreateExpense: RequestHandler = async (req, res, next) => {
-  const userId = req.body.id;
-  const result = insertExpenseParams.safeParse(req.body);
-  if (!result.success)
-    return res
-      .status(400)
-      .json({ error: 400, message: result.error.flatten().fieldErrors });
+export const createExpense: RequestHandler = async (req, res, next) => {
   try {
-    const expense = await db.expense.create({
+    const params = insertExpenseParams.parse(req.body);
+    await db.expense.create({
       data: {
-        value: result.data.value,
-        date: result.data.date,
-        note: result.data.note,
-        description: result.data.description || "",
-        category: result.data.category || "",
+        value: params.value,
+        date: params.date,
+        note: params.note,
+        description: params.description,
+        category: params.category,
+        paid: params.paid,
+        paymentMethod: params.paymentMethod,
+        public: params.public,
+        user: {
+          connect: {
+            id: req.body.user.id,
+          },
+        },
+        attachments: {
+          create: params.attachments,
+        },
       },
     });
     return res.status(201).json({
-      expense,
+      message: "Expense created successfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteExpense: RequestHandler = async (req, res, next) => {
+  try {
+    const id = expenseIdSchema.parse(parseInt(req.params.id));
+    await db.$transaction([
+      db.expense.findUniqueOrThrow({
+        where: {
+          id: id,
+          userId: req.body.user.id,
+        },
+      }),
+      db.expense.delete({
+        where: {
+          id: id,
+          userId: req.body.user.id,
+        },
+      }),
+    ]);
+    return res.status(200).json({
+      message: "Expense deleted successfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateExpense: RequestHandler = async (req, res, next) => {
+  try {
+    const id = expenseIdSchema.parse(parseInt(req.params.id));
+    const params = insertExpenseParams.parse(req.body);
+    await db.expense.update({
+      where: {
+        id: id,
+        userId: req.body.user.id,
+      },
+      data: {
+        value: params.value,
+        date: params.date,
+        note: params.note,
+        description: params.description,
+        category: params.category,
+        paid: params.paid,
+        paymentMethod: params.paymentMethod,
+        public: params.public,
+        attachments: {
+          create: params.attachments,
+        },
+      },
+    });
+    return res.status(200).json({
+      message: "Expense updated successfully.",
     });
   } catch (error) {
     next(error);
