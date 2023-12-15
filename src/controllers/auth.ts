@@ -26,7 +26,13 @@ export const signInUser: RequestHandler = async (req, res, next) => {
     const user = await db.user.findUnique({
       where: { email: params.email },
     });
-    if (!user || !bycrypt.compareSync(params.password, user.password)) {
+    if (
+      !user ||
+      !bycrypt.compareSync(
+        params.password,
+        bycrypt.hashSync(params.password, 8)
+      )
+    ) {
       return res.status(404).json({
         message: "Invalid credentials.",
       });
