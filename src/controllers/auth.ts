@@ -27,11 +27,7 @@ export const signInUser: RequestHandler = async (req, res, next) => {
       where: { email: params.email },
     });
     if (
-      !user ||
-      !bycrypt.compareSync(
-        params.password,
-        bycrypt.hashSync(params.password, 8)
-      )
+      !bycrypt.compareSync(bycrypt.hashSync(params.password, 8), user.password)
     ) {
       return res.status(404).json({
         message: "Invalid credentials.",
