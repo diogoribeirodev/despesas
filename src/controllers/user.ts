@@ -41,7 +41,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     const id = userIdSchema.parse(req.params.id);
     if (req.body.user.id !== id)
       return res.status(401).json({ message: "Unauthorized!" });
-    console.log(req.body);
     const params = insertUserParams
       .omit({ password: true })
       .parse({ name: req.body.name, email: req.body.email });

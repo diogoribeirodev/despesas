@@ -61,8 +61,6 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
     public: publico?.toString() === "true" ? true : false,
   };
 
-  console.log(where);
-
   try {
     const expenses = await db.expense.findMany({
       where: where,
