@@ -24,5 +24,5 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
     });
   }
   if (err instanceof Error)
-    return res.status(500).json({ message: "Something went wrong." });
+    return res.status(500).json({ message: err.message });
 };
