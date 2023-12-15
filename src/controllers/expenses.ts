@@ -100,9 +100,14 @@ export const createExpense: RequestHandler = async (req, res, next) => {
           },
         },
         attachments: {
-          create: params.attachments.map((attachment) => ({
-            data: attachment.data,
-          })),
+          createMany: {
+            data:
+              (params.attachments &&
+                params.attachments.map((attachment) => ({
+                  data: attachment.data,
+                }))) ||
+              [],
+          },
         },
       },
     });
@@ -158,9 +163,14 @@ export const updateExpense: RequestHandler = async (req, res, next) => {
         paymentMethod: params.paymentMethod,
         public: params.public,
         attachments: {
-          create: params.attachments.map((attachment) => ({
-            data: attachment.data,
-          })),
+          createMany: {
+            data:
+              (params.attachments &&
+                params.attachments.map((attachment) => ({
+                  data: attachment.data,
+                }))) ||
+              [],
+          },
         },
       },
     });
