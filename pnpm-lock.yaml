@@ -27,11 +27,11 @@ dependencies:
     specifier: ^9.0.2
     version: 9.0.2
   zod:
-    specifier: ^3.22.4
-    version: 3.22.4
+    specifier: ^3.21.1
+    version: 3.21.1
   zod-prisma:
     specifier: ^0.5.4
-    version: 0.5.4(prisma@5.7.0)(zod@3.22.4)
+    version: 0.5.4(prisma@5.7.0)(zod@3.21.1)
 
 devDependencies:
   '@types/bcryptjs':
@@ -1465,7 +1465,7 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /zod-prisma@0.5.4(prisma@5.7.0)(zod@3.22.4):
+  /zod-prisma@0.5.4(prisma@5.7.0)(zod@3.21.1):
     resolution: {integrity: sha512-5Ca4Qd1a1jy1T/NqCEpbr0c+EsbjJfJ/7euEHob3zDvtUK2rTuD1Rc/vfzH8q8PtaR2TZbysD88NHmrLwpv3Xg==}
     engines: {node: '>=14'}
     hasBin: true
@@ -1481,9 +1481,9 @@ packages:
       parenthesis: 3.1.8
       prisma: 5.7.0
       ts-morph: 13.0.3
-      zod: 3.22.4
+      zod: 3.21.1
     dev: false
 
-  /zod@3.22.4:
-    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+  /zod@3.21.1:
+    resolution: {integrity: sha512-+dTu2m6gmCbO9Ahm4ZBDapx2O6ZY9QSPXst2WXjcznPMwf2YNpn3RevLx4KkZp1OPW/ouFcoBtBzFz/LeY69oA==}
     dev: false

@@ -23,7 +23,7 @@ model User {
   email    String @unique
   password String
   name     String
-  despesas Expense[]
+  expenses Expense[]
 }
 
 model Expense {

@@ -9,7 +9,8 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
     const params = insertUserParams.parse(req.body);
     await db.user.create({
       data: {
-        ...params,
+        name: params.name,
+        email: params.email,
         password: bycrypt.hashSync(params.password, 8),
       },
     });
