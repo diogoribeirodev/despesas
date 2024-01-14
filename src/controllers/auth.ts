@@ -37,6 +37,7 @@ export const signInUser: RequestHandler = async (req, res, next) => {
       id: user.id,
     });
     return res.status(200).json({
+      name: user.name,
       token: accessToken,
     });
   } catch (error) {
