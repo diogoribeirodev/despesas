@@ -59,7 +59,6 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
       gte: minDate ? new Date(minDate as string) : undefined,
       lte: maxDate ? new Date(maxDate as string) : undefined,
     },
-    publico: Boolean(publico) === true ? true : false,
   };
 
   try {
