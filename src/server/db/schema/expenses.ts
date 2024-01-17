@@ -34,12 +34,7 @@ export const insertExpenseParams = insertExpenseSchema.extend({
     .min(3, { message: "Category too short." })
     .max(20, { message: "Category too long." })
     .optional(),
-  attachments: z
-    .array(insertAttachmentSchema)
-    .max(5, {
-      message: "Too many attachments.",
-    })
-    .optional(),
+  attachments: insertAttachmentSchema.optional(),
   paid: z.boolean(),
   paymentMethod: z
     .string()
