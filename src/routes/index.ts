@@ -11,5 +11,4 @@ router.use("/user", userRouter);
 router.use("/expenses", expenseRouter);
 router.use("/public", publicRouter);
 
-
 export default router;
