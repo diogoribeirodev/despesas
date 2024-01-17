@@ -13,7 +13,6 @@ const expenseRouter = Router();
 
 expenseRouter.use(authMiddleware);
 expenseRouter.get("/:id", getExpense);
-expenseRouter.get("/public/:id", getPublicExpense);
 expenseRouter.get("/", getExpenses);
 expenseRouter.post("/", createExpense);
 expenseRouter.put("/:id", updateExpense);
