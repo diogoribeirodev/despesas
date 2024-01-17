@@ -30,7 +30,7 @@ export const insertUserParams = insertUserSchema
         {
           message:
             "Password must contain at least 8 characters, one uppercase, one number and one special character.",
-        }
+        },
       ),
   })
   .strict();
