@@ -42,6 +42,27 @@ export const getExpense: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getPublicExpense: RequestHandler = async (req, res, next) => {
+  try {
+    const id = expenseIdSchema.parse(parseInt(req.params.id));
+    const expense = await db.expense.findUniqueOrThrow({
+      where: {
+        id: id,
+        userId: req.body.user.id,
+        publico: true,
+      },
+      include: {
+        attachments: true,
+      },
+    });
+    return res.status(200).json({
+      expense,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getExpenses: RequestHandler = async (req, res, next) => {
   const { search, minDate, maxDate, limit, offset, publico } = req.query;
   let user = req.body.user.id;
