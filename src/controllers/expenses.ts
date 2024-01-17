@@ -44,8 +44,9 @@ export const getExpense: RequestHandler = async (req, res, next) => {
 
 export const getExpenses: RequestHandler = async (req, res, next) => {
   const { search, minDate, maxDate, limit, offset, publico } = req.query;
+  let user = req.body.user.id;
   const where: WhereClause = {
-    userId: req.body.user.id,
+    userId: user ? user : undefined,
     description: {
       contains: search as string,
       mode: "insensitive",
