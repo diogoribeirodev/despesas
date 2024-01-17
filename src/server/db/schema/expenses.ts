@@ -18,8 +18,7 @@ export const insertExpenseParams = insertExpenseSchema.extend({
       invalid_type_error: "Value has to be a number.",
     })
     .positive({ message: "Paid amount has to be positive." }),
-  date: z
-    .date()
+  date: z.coerce.date()
     ,
   note: z
     .string()
