@@ -45,7 +45,7 @@ export const getExpense: RequestHandler = async (req, res, next) => {
 export const getExpenses: RequestHandler = async (req, res, next) => {
   const { search, minDate, maxDate, limit, offset, publico } = req.query;
   const where: WhereClause = {
-    userId: publico?.toString() === "true" ? undefined : req.body.user.id,
+    userId: req.body.user.id,
     description: {
       contains: search as string,
       mode: "insensitive",
@@ -58,7 +58,7 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
       gte: minDate ? new Date(minDate as string) : undefined,
       lte: maxDate ? new Date(maxDate as string) : undefined,
     },
-    publico: publico?.toString() === "true" ? true : false,
+    publico: Boolean(publico) === true ? true : false,
   };
 
   try {
