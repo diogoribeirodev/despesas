@@ -20,7 +20,6 @@ export const insertExpenseParams = insertExpenseSchema.extend({
     .positive({ message: "Paid amount has to be positive." }),
   date: z
     .date()
-    .min(new Date(), { message: "Date too old." })
     ,
   note: z
     .string()
