@@ -37,7 +37,7 @@ model Expense {
   paymentMethod  String?
   userId      String
   attachments Attachment[]
-  public      Boolean   @default(false)
+  publico      Boolean   @default(false)
   user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

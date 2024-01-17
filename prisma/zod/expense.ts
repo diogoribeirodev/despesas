@@ -16,7 +16,7 @@ export const expenseSchema = z.object({
   paid: z.boolean(),
   paymentMethod: z.string().nullish(),
   userId: z.string(),
-  public: z.boolean(),
+  publico: z.boolean(),
 });
 
 export interface CompleteExpense extends z.infer<typeof expenseSchema> {

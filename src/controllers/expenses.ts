@@ -19,7 +19,7 @@ type WhereClause = {
     gte?: Date;
     lte?: Date;
   };
-  public?: boolean;
+  publico?: boolean;
 };
 
 export const getExpense: RequestHandler = async (req, res, next) => {
@@ -58,7 +58,7 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
       gte: minDate ? new Date(minDate as string) : undefined,
       lte: maxDate ? new Date(maxDate as string) : undefined,
     },
-    public: publico?.toString() === "true" ? true : false,
+    publico: publico?.toString() === "true" ? true : false,
   };
 
   try {
@@ -95,7 +95,7 @@ export const createExpense: RequestHandler = async (req, res, next) => {
         category: params.category,
         paid: params.paid,
         paymentMethod: params.paymentMethod,
-        public: params.public,
+        publico: params.publico,
         user: {
           connect: {
             id: req.body.user.id,
@@ -163,7 +163,7 @@ export const updateExpense: RequestHandler = async (req, res, next) => {
         category: params.category,
         paid: params.paid,
         paymentMethod: params.paymentMethod,
-        public: params.public,
+        publico: params.publico,
         attachments: {
           createMany: {
             data:
