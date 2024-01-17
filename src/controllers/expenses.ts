@@ -48,7 +48,6 @@ export const getPublicExpense: RequestHandler = async (req, res, next) => {
     const expense = await db.expense.findUniqueOrThrow({
       where: {
         id: id,
-        userId: req.body.user.id,
         publico: true,
       },
       include: {
